@@ -28,6 +28,8 @@ import (
 var _ = Describe("[Self Hosted] Running the Cluster API E2E self-hosted tests", func() {
 	ctx := context.TODO()
 
+	// TODO: make sure we are testing with packet ccm, CPEM, and without CPEM
+
 	Context("[Needs Published Image] Running tests that require published images", func() {
 		Context("Running the self-hosted spec", func() {
 			capi_e2e.SelfHostedSpec(ctx, func() capi_e2e.SelfHostedSpecInput {

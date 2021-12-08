@@ -28,6 +28,8 @@ import (
 var _ = Describe("[QuickStart] Running the Cluster API E2E QuickStart tests", func() {
 	ctx := context.TODO()
 
+	// TODO: make sure we are testing with packet ccm, CPEM, and without CPEM
+
 	Context("Running the quickstart spec", func() {
 		capi_e2e.QuickStartSpec(ctx, func() capi_e2e.QuickStartSpecInput {
 			return capi_e2e.QuickStartSpecInput{
