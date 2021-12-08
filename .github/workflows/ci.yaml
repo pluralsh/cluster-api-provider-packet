@@ -332,7 +332,7 @@ jobs:
         echo "TAG=sha-${GITHUB_SHA::7}" >> $GITHUB_ENV
     - name: Prepull the pre-built image
       run: docker pull ${REGISTRY}/${IMAGE_NAME}:${TAG}
-    - name: "e2e-conformance"
+    - name: "e2e-workload-upgrade"
       env:
         PACKET_API_KEY: ${{ secrets.PACKET_API_TOKEN }}
         PROJECT_ID: ${{ secrets.PROJECT_ID }}

@@ -109,6 +109,7 @@ providers:
   - name: v0.3.11
     value: "https://github.com/kubernetes-sigs/cluster-api-provider-packet/releases/download/v0.3.11/infrastructure-components.yaml"
     type: "url"
+    contract: v1alpha3
     files:
       # Add cluster templates
       - sourcePath: "../data/v1alpha3/cluster-template-packet-ccm.yaml"
@@ -118,6 +119,7 @@ providers:
     replacements:
     - old: "image: .*/cluster-api-provider-packet:.*"
       new: "image: ${REGISTRY:=ghcr.io}/${IMAGE_NAME:=kubernetes-sigs/cluster-api-provider-packet}:${TAG:=e2e}"
+    contract: v1beta1
     files:
     - sourcePath: "../../../metadata.yaml"
     - sourcePath: "../data/v1beta1/cluster-template.yaml"
