@@ -57,11 +57,11 @@ else
 endif
 
 # Binaries.
-CONTROLLER_GEN_VER := v0.6.2
+CONTROLLER_GEN_VER := v0.7.0
 CONTROLLER_GEN_BIN := controller-gen
 CONTROLLER_GEN := $(TOOLS_BIN_DIR)/$(CONTROLLER_GEN_BIN)-$(CONTROLLER_GEN_VER)
 
-CONVERSION_GEN_VER := v0.21.7
+CONVERSION_GEN_VER := v0.22.6
 CONVERSION_GEN_BIN := conversion-gen
 CONVERSION_GEN := $(TOOLS_BIN_DIR)/$(CONVERSION_GEN_BIN)-$(CONVERSION_GEN_VER)
 
@@ -118,7 +118,7 @@ endif
 # Build time versioning details.
 LDFLAGS := $(shell hack/version.sh)
 
-GOLANG_VERSION := 1.16.10
+GOLANG_VERSION := 1.16.13
 
 ## --------------------------------------
 ## Help

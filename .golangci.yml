@@ -99,7 +99,6 @@ linters-settings:
     # List of allowed `replace` directives. Default is empty.
     replace-allow-list:
       - sigs.k8s.io/cluster-api
-      - github.com/osrg/gobgp
     # Allow to not explain why the version has been retracted in the `retract` directives. Default is false.
     retract-allow-no-explanation: false
     # Forbid the use of the `exclude` directives. Default is false.
