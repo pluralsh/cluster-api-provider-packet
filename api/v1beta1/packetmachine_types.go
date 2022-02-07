@@ -58,7 +58,7 @@ type PacketMachineSpec struct {
 	MachineType  string   `json:"machineType"`
 	SSHKeys      []string `json:"sshKeys,omitempty"`
 
-	// Facility represents the Packet facility for this cluster.
+	// Facility represents the Packet facility for this machine.
 	// Override from the PacketCluster spec.
 	// +optional
 	Facility string `json:"facility,omitempty"`
@@ -120,7 +120,7 @@ type PacketMachineStatus struct {
 	// +optional
 	FailureMessage *string `json:"failureMessage,omitempty"`
 
-	// Conditions defines current service state of the PacketCluster.
+	// Conditions defines current service state of the PacketMachine.
 	// +optional
 	Conditions clusterv1.Conditions `json:"conditions,omitempty"`
 }
@@ -153,12 +153,12 @@ type PacketMachineList struct {
 	Items           []PacketMachine `json:"items"`
 }
 
-// GetConditions returns the list of conditions for an AzureCluster API object.
+// GetConditions returns the list of conditions for an PacketMachine API object.
 func (m *PacketMachine) GetConditions() clusterv1.Conditions {
 	return m.Status.Conditions
 }
 
-// SetConditions will set the given conditions on an AzureCluster object.
+// SetConditions will set the given conditions on an PacketMachine object.
 func (m *PacketMachine) SetConditions(conditions clusterv1.Conditions) {
 	m.Status.Conditions = conditions
 }

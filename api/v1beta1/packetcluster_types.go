@@ -75,12 +75,12 @@ type PacketClusterList struct {
 	Items           []PacketCluster `json:"items"`
 }
 
-// GetConditions returns the list of conditions for an AzureCluster API object.
+// GetConditions returns the list of conditions for an PacketCluster API object.
 func (c *PacketCluster) GetConditions() clusterv1.Conditions {
 	return c.Status.Conditions
 }
 
-// SetConditions will set the given conditions on an AzureCluster object.
+// SetConditions will set the given conditions on an PacketCluster object.
 func (c *PacketCluster) SetConditions(conditions clusterv1.Conditions) {
 	c.Status.Conditions = conditions
 }

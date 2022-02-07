@@ -129,7 +129,7 @@ spec:
                         type: string
                       facility:
                         description: Facility represents the Packet facility for this
-                          cluster. Override from the PacketCluster spec.
+                          machine. Override from the PacketCluster spec.
                         type: string
                       hardwareReservationID:
                         description: HardwareReservationID is the unique device hardware

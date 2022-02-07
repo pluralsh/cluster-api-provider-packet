@@ -195,7 +195,7 @@ spec:
               billingCycle:
                 type: string
               facility:
-                description: Facility represents the Packet facility for this cluster.
+                description: Facility represents the Packet facility for this machine.
                   Override from the PacketCluster spec.
                 type: string
               hardwareReservationID:
@@ -252,7 +252,7 @@ spec:
                   type: object
                 type: array
               conditions:
-                description: Conditions defines current service state of the PacketCluster.
+                description: Conditions defines current service state of the PacketMachine.
                 items:
                   description: Condition defines an observation of a Cluster API resource
                     operational state.
