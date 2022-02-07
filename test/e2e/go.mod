@@ -13,13 +13,13 @@ require (
 	k8s.io/apimachinery v0.22.6
 	k8s.io/client-go v0.22.6
 	k8s.io/utils v0.0.0-20210930125809-cb0fa318a74b
-	sigs.k8s.io/cluster-api v1.0.2
+	sigs.k8s.io/cluster-api v1.0.4
 	sigs.k8s.io/cluster-api-provider-packet v0.0.0-00010101000000-000000000000
-	sigs.k8s.io/cluster-api/test v1.0.2
+	sigs.k8s.io/cluster-api/test v1.0.4
 	sigs.k8s.io/controller-runtime v0.10.3
 )
 
 replace (
-	sigs.k8s.io/cluster-api => sigs.k8s.io/cluster-api v1.0.2
+	sigs.k8s.io/cluster-api => sigs.k8s.io/cluster-api v1.0.4
 	sigs.k8s.io/cluster-api-provider-packet => ../../
 )
