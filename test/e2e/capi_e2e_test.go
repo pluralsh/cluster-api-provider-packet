@@ -28,20 +28,16 @@ import (
 var _ = Describe("[General] Running the Cluster API E2E tests", func() {
 	ctx := context.TODO()
 
-	// TODO: make sure we are testing with packet ccm, CPEM, and without CPEM
-
 	// The following upstream tests are not implemented because we do not support the features
 	// tested:
 	// - capi_e2e.KCPAdoptionSpec
-	// - capi_e2e.MachinePoolSpec
+	// - capi_e2e.MachinePoolSpec ???
+	// - capi_e2e.ClusetrClassChangesSpec
 
 	// The following upstream tests are not implemented because they are subsets of
 	// capi_e2e.ClusterUpgradeConformanceSpec:
 	// - capi_e2e.MachineDeploymentScaleSpec
 	// - capi_e2e.MachineDeploymentRolloutSpec
-	// - capi_e2e.KCPUpgradeSpec w/ ControlPlaneMachineCount = 1
-
-	// TODO: any new CAPI v1 tests that need to be added? above list was made with v1alpha4 in mind
 
 	Context("Running the mhc-remediation spec", func() {
 		capi_e2e.MachineRemediationSpec(ctx, func() capi_e2e.MachineRemediationSpecInput {

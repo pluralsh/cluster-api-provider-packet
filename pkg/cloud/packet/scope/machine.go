@@ -23,13 +23,11 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/go-logr/logr"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
-	"k8s.io/klog/v2/klogr"
 	"k8s.io/utils/pointer"
 	clusterv1 "sigs.k8s.io/cluster-api/api/v1beta1"
 	bootstrapv1 "sigs.k8s.io/cluster-api/bootstrap/kubeadm/api/v1beta1"
@@ -62,7 +60,6 @@ var (
 // MachineScopeParams defines the input parameters used to create a new MachineScope.
 type MachineScopeParams struct {
 	Client        client.Client
-	Logger        logr.Logger
 	Cluster       *clusterv1.Cluster
 	Machine       *clusterv1.Machine
 	PacketCluster *infrav1.PacketCluster
@@ -91,10 +88,6 @@ func NewMachineScope(ctx context.Context, params MachineScopeParams) (*MachineSc
 		return nil, ErrMissingPacketMachine
 	}
 
-	if params.Logger == nil {
-		params.Logger = klogr.New()
-	}
-
 	providerIDPrefix, err := getProviderIDPrefix(ctx, params.Client, params.workloadClientGetter,
 		params.Cluster, params.Machine, params.PacketMachine)
 	if err != nil {
@@ -106,7 +99,6 @@ func NewMachineScope(ctx context.Context, params MachineScopeParams) (*MachineSc
 		return nil, fmt.Errorf("failed to init patch helper: %w", err)
 	}
 	return &MachineScope{
-		Logger:           params.Logger,
 		client:           params.Client,
 		patchHelper:      helper,
 		providerIDPrefix: providerIDPrefix,
@@ -120,7 +112,6 @@ func NewMachineScope(ctx context.Context, params MachineScopeParams) (*MachineSc
 
 // MachineScope defines a scope defined around a machine and its cluster.
 type MachineScope struct {
-	logr.Logger
 	client           client.Client
 	patchHelper      *patch.Helper
 	providerIDPrefix string

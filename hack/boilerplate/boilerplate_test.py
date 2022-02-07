@@ -23,7 +23,6 @@ import sys
 class TestBoilerplate(unittest.TestCase):
   """
   Note: run this test from the hack/boilerplate directory.
-
   $ python -m unittest boilerplate_test
   """
 

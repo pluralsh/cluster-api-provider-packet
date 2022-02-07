@@ -1,14 +1,14 @@
 name: Cleanup
 on:
   schedule:
-    - cron: "0 */4 * * *" # TODO: Run every 4 hours to soak test, should be less frequent before merge (weekly/daily/???)
+    - cron: "0 */2 * * *" # TODO: Run every 4 hours to soak test, should be less frequent before merge (weekly/daily/???)
 jobs:
   cleanup:
     name: Cleanup any orphaned CI Resources
     runs-on: ubuntu-latest
     steps:
     - name: checkout
-      uses: actions/checkout@v2.4.0
+      uses: actions/checkout@v3
     - uses: ./.github/actions/setup-go
     - name: Run the cleanup tool
       run: go run ./cmd/ci-clean
