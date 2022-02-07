@@ -1,7 +1,7 @@
 name: Cleanup
 on:
   schedule:
-    - cron: "0 */4 * * *" # TODO: Run every 4 hours to soak test, should be less frequent before merge (weekly/daily/???)
+    - cron: "0 */2 * * *" # TODO: Run every 4 hours to soak test, should be less frequent before merge (weekly/daily/???)
 jobs:
   cleanup:
     name: Cleanup any orphaned CI Resources

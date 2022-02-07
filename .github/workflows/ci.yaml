@@ -5,7 +5,7 @@ on:
     - main
     - capi-v1 # TODO: Used for testing my fork, remove prior to merge
   schedule:
-    - cron: "0 13 * * *"
+    - cron: "0 */4 * * *" # TODO: Run every 4 hours to soak test, should be less frequent before merge (weekly/daily/???)
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
