@@ -5,7 +5,7 @@ go 1.16
 require (
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/docker/distribution v2.7.1+incompatible
-	github.com/onsi/ginkgo v1.16.4
+	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.16.0
 	github.com/packethost/packngo v0.21.0
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
