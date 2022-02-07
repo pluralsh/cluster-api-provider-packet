@@ -13,8 +13,8 @@ providers:
 - name: cluster-api
   type: CoreProvider
   versions:
-  - name: v0.3.23 # latest published release in the v1alpha3 series
-    value: "https://github.com/kubernetes-sigs/cluster-api/releases/download/v0.3.23/core-components.yaml"
+  - name: v0.3.25 # latest published release in the v1alpha3 series
+    value: "https://github.com/kubernetes-sigs/cluster-api/releases/download/v0.3.25/core-components.yaml"
     type: "url"
     contract: v1alpha3
     replacements:
@@ -31,8 +31,8 @@ providers:
         new: --metrics-addr=:8080
     files:
     - sourcePath: "../data/shared/v1beta1/metadata.yaml"
-  - name: v1.0.1 # latest published release in the v1beta1 series
-    value: "https://github.com/kubernetes-sigs/cluster-api/releases/download/v1.0.1/core-components.yaml"
+  - name: v1.0.4 # latest published release in the v1beta1 series
+    value: "https://github.com/kubernetes-sigs/cluster-api/releases/download/v1.0.4/core-components.yaml"
     type: "url"
     contract: v1beta1
     replacements:
@@ -44,8 +44,8 @@ providers:
 - name: kubeadm
   type: BootstrapProvider
   versions:
-  - name: v0.3.23 # latest published release in the v1alpha3 series
-    value: "https://github.com/kubernetes-sigs/cluster-api/releases/download/v0.3.23/bootstrap-components.yaml"
+  - name: v0.3.25 # latest published release in the v1alpha3 series
+    value: "https://github.com/kubernetes-sigs/cluster-api/releases/download/v0.3.25/bootstrap-components.yaml"
     type: "url"
     contract: v1alpha3
     replacements:
@@ -62,8 +62,8 @@ providers:
         new: --metrics-addr=:8080
     files:
     - sourcePath: "../data/shared/v1beta1/metadata.yaml"
-  - name: v1.0.1 # latest published release in the v1beta1 series
-    value: "https://github.com/kubernetes-sigs/cluster-api/releases/download/v1.0.1/bootstrap-components.yaml"
+  - name: v1.0.4 # latest published release in the v1beta1 series
+    value: "https://github.com/kubernetes-sigs/cluster-api/releases/download/v1.0.4/bootstrap-components.yaml"
     type: "url"
     contract: v1beta1
     replacements:
@@ -75,8 +75,8 @@ providers:
 - name: kubeadm
   type: ControlPlaneProvider
   versions:
-  - name: v0.3.23 # latest published release in the v1alpha3 series; this is used for v1alpha3 --> v1beta1 clusterctl upgrades test only.
-    value: "https://github.com/kubernetes-sigs/cluster-api/releases/download/v0.3.23/control-plane-components.yaml"
+  - name: v0.3.25 # latest published release in the v1alpha3 series; this is used for v1alpha3 --> v1beta1 clusterctl upgrades test only.
+    value: "https://github.com/kubernetes-sigs/cluster-api/releases/download/v0.3.25/control-plane-components.yaml"
     type: "url"
     contract: v1alpha3
     replacements:
@@ -93,8 +93,8 @@ providers:
         new: --metrics-addr=:8080
     files:
     - sourcePath: "../data/shared/v1beta1/metadata.yaml"
-  - name: v1.0.1 # latest published release in the v1beta1 series; this is used for v1beta1 --> main clusterctl upgrades test only.
-    value: "https://github.com/kubernetes-sigs/cluster-api/releases/download/v1.0.1/control-plane-components.yaml"
+  - name: v1.0.4 # latest published release in the v1beta1 series; this is used for v1beta1 --> main clusterctl upgrades test only.
+    value: "https://github.com/kubernetes-sigs/cluster-api/releases/download/v1.0.4/control-plane-components.yaml"
     type: "url"
     contract: v1beta1
     replacements:
@@ -147,7 +147,7 @@ variables:
 
   # NOTE: INIT_WITH_BINARY and INIT_WITH_KUBERNETES_VERSION are only used by the clusterctl upgrade test to initialize
   # the management cluster to be upgraded.
-  INIT_WITH_BINARY: "https://github.com/kubernetes-sigs/cluster-api/releases/download/v0.3.23/clusterctl-{OS}-{ARCH}"
+  INIT_WITH_BINARY: "https://github.com/kubernetes-sigs/cluster-api/releases/download/v0.3.25/clusterctl-{OS}-{ARCH}"
   # CAPI v0.3.x cannot be deployed on Kubernetes >= v1.22.
   INIT_WITH_PROVIDERS_CONTRACT: "v1alpha3"
   INIT_WITH_KUBERNETES_VERSION: "v1.21.2"
@@ -155,10 +155,10 @@ variables:
 intervals:
   default/wait-controllers: ["3m", "10s"]
   default/wait-cluster: ["20m", "10s"]
-  default/wait-control-plane: ["50m", "10s"]
+  default/wait-control-plane: ["30m", "10s"]
   default/wait-worker-nodes: ["30m", "10s"]
   default/wait-delete-cluster: ["20m", "10s"]
-  default/wait-machine-upgrade: ["60m", "10s"]
+  default/wait-machine-upgrade: ["30m", "10s"]
   default/wait-machine-status: ["20m", "10s"]
   default/wait-failed-machine-status: ["2m", "10s"]
   default/wait-machine-remediation: ["30m", "10s"]
@@ -168,4 +168,4 @@ intervals:
   node-drain/wait-deployment-available: ["3m", "10s"]
   node-drain/wait-control-plane: ["30m", "10s"]
   node-drain/wait-machine-deleted: ["5m", "10s"]
-  kcp-upgrade/wait-machine-upgrade: ["90m", "10s"]
+  kcp-upgrade/wait-machine-upgrade: ["30m", "10s"]
