@@ -42,6 +42,7 @@ var _ = Describe("[General] Running the Cluster API E2E tests", func() {
 	// - capi_e2e.KCPUpgradeSpec w/ ControlPlaneMachineCount = 1
 
 	// TODO: any new CAPI v1 tests that need to be added? above list was made with v1alpha4 in mind
+	// - ClusterClassChangesSpec???
 
 	Context("Running the mhc-remediation spec", func() {
 		capi_e2e.MachineRemediationSpec(ctx, func() capi_e2e.MachineRemediationSpecInput {

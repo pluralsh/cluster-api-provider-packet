@@ -37,6 +37,8 @@ var _ = Describe("[Workload Upgrade] Running the Cluster API E2E Workload Cluste
 	// - capi_e2e.MachineDeploymentScaleSpec
 	// - capi_e2e.MachineDeploymentRolloutSpec
 	// - capi_e2e.KCPUpgradeSpec w/ ControlPlaneMachineCount = 1
+	// TODO: replace kcp upgrade spec tests with ClusterUpgradeConformanceSpec tests
+	//       for same functionality
 
 	Context("Running the cluster-upgrade spec", func() {
 		capi_e2e.ClusterUpgradeConformanceSpec(ctx, func() capi_e2e.ClusterUpgradeConformanceSpecInput {

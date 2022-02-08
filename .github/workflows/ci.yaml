@@ -296,7 +296,6 @@ jobs:
         CONTROLPLANE_NODE_TYPE: c3.small.x86
         WORKER_NODE_TYPE: c3.small.x86
         GINKGO_NODES: "1"
-        GINKGO_FLAKE_ATTEMPTS: "1"
       run: ./scripts/ci-e2e-capi-management-upgrade.sh
     - name: Upload artifact
       uses: actions/upload-artifact@v2
@@ -343,7 +342,6 @@ jobs:
         CONTROLPLANE_NODE_TYPE: c3.small.x86
         WORKER_NODE_TYPE: c3.small.x86
         GINKGO_NODES: "1"
-        GINKGO_FLAKE_ATTEMPTS: "1"
       run: ./scripts/ci-e2e-capi-workload-upgrade.sh
     - name: Upload artifact
       uses: actions/upload-artifact@v2
