@@ -147,7 +147,14 @@ spec:
         netmask 255.255.255.255
       EOF
     - systemctl restart networking
-    - 'if [ -f "/run/kubeadm/kubeadm.yaml" ]; then kubectl --kubeconfig /etc/kubernetes/admin.conf create secret generic -n kube-system metal-cloud-config --from-literal=cloud-sa.json=''{"apiKey": "{{ .apiKey }}","projectID": "${PROJECT_ID}", "eipTag": "cluster-api-provider-packet:cluster-id:${CLUSTER_NAME}"}''; kubectl apply --kubeconfig /etc/kubernetes/admin.conf -f https://raw.githubusercontent.com/detiber/packet-ccm/test/deploy/template/deployment.yaml; fi'
+    - |-
+      if [ -f "/run/kubeadm/kubeadm.yaml" ]; then
+        export KUBECONFIG=/etc/kubernetes/admin.conf
+        export CPEM_YAML=https://raw.githubusercontent.com/detiber/packet-ccm/test/deploy/template/deployment.yaml
+        export CREATE_SECRET_COMMAND="kubectl create secret generic -n kube-system metal-cloud-config --from-literal=cloud-sa.json='{\"apiKey\": \"{{ .apiKey }}\",\"projectID\": \"${PROJECT_ID}\", \"eipTag\": \"cluster-api-provider-packet:cluster-id:${CLUSTER_NAME}\"}'"
+        $${CREATE_SECRET_COMMAND} || sleep 1; $${CREATE_SECRET_COMMAND} || sleep 1; $${CREATE_SECRET_COMMAND}
+        kubectl apply -f $${CPEM_YAML} || sleep 1; kubectl apply -f $${CPEM_YAML} || sleep 1; kubectl apply -f $${CPEM_YAML}
+      fi
     preKubeadmCommands:
     - sed -ri '/\sswap\s/s/^#?/#/' /etc/fstab
     - swapoff -a
