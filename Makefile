@@ -297,7 +297,6 @@ generate: ## Generate code
 generate-templates: $(KUSTOMIZE) ## Generate cluster templates
 	$(KUSTOMIZE) build templates/experimental-crs-cni --load_restrictor none > templates/cluster-template-crs-cni.yaml
 	$(KUSTOMIZE) build templates/addons/calico > templates/addons/calico.yaml
-	$(KUSTOMIZE) build templates/addons/cilium > templates/addons/cilium.yaml
 
 .PHONY: generate-go
 generate-go: $(CONTROLLER_GEN) $(CONVERSION_GEN) ## Runs Go related generate targets
