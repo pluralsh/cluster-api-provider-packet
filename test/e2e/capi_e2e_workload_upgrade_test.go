@@ -49,7 +49,7 @@ var _ = Describe("[Workload Upgrade] Running the Cluster API E2E Workload Cluste
 				ArtifactFolder:           artifactFolder,
 				SkipCleanup:              skipCleanup,
 				SkipConformanceTests:     true,
-				ControlPlaneMachineCount: pointer.Int64(3),
+				ControlPlaneMachineCount: pointer.Int64(1),
 				WorkerMachineCount:       pointer.Int64(1),
 				Flavor:                   pointer.String(clusterctl.DefaultFlavor),
 			}
