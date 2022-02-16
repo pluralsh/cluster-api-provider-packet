@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1.1-experimental
+
 # Copyright 2020 The Kubernetes Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +15,7 @@
 # limitations under the License.
 
 # Build the manager binary
-ARG GOVER=1.16.13
+ARG GOVER=1.17.7
 FROM golang:${GOVER} as builder
 
 WORKDIR /workspace

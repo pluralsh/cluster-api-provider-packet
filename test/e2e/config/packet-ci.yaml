@@ -31,8 +31,8 @@ providers:
         new: --metrics-addr=:8080
     files:
     - sourcePath: "../data/shared/v1beta1/metadata.yaml"
-  - name: v1.0.4 # latest published release in the v1beta1 series
-    value: "https://github.com/kubernetes-sigs/cluster-api/releases/download/v1.0.4/core-components.yaml"
+  - name: v1.1.1 # latest published release in the v1beta1 series
+    value: "https://github.com/kubernetes-sigs/cluster-api/releases/download/v1.1.1/core-components.yaml"
     type: "url"
     contract: v1beta1
     replacements:
@@ -62,8 +62,8 @@ providers:
         new: --metrics-addr=:8080
     files:
     - sourcePath: "../data/shared/v1beta1/metadata.yaml"
-  - name: v1.0.4 # latest published release in the v1beta1 series
-    value: "https://github.com/kubernetes-sigs/cluster-api/releases/download/v1.0.4/bootstrap-components.yaml"
+  - name: v1.1.1 # latest published release in the v1beta1 series
+    value: "https://github.com/kubernetes-sigs/cluster-api/releases/download/v1.1.1/bootstrap-components.yaml"
     type: "url"
     contract: v1beta1
     replacements:
@@ -93,8 +93,8 @@ providers:
         new: --metrics-addr=:8080
     files:
     - sourcePath: "../data/shared/v1beta1/metadata.yaml"
-  - name: v1.0.4 # latest published release in the v1beta1 series; this is used for v1beta1 --> main clusterctl upgrades test only.
-    value: "https://github.com/kubernetes-sigs/cluster-api/releases/download/v1.0.4/control-plane-components.yaml"
+  - name: v1.1.1 # latest published release in the v1beta1 series; this is used for v1beta1 --> main clusterctl upgrades test only.
+    value: "https://github.com/kubernetes-sigs/cluster-api/releases/download/v1.1.1/control-plane-components.yaml"
     type: "url"
     contract: v1beta1
     replacements:
@@ -129,11 +129,11 @@ providers:
     - sourcePath: "../data/v1beta1/cluster-template-kcp-remediation.yaml"
 
 variables:
-  KUBERNETES_VERSION_MANAGEMENT: "v1.22.0"
-  KUBERNETES_VERSION: "${KUBERNETES_VERSION:-v1.22.0}"
-  KUBERNETES_VERSION_UPGRADE_FROM: "v1.21.2"
-  KUBERNETES_VERSION_UPGRADE_TO: "v1.22.0"
-  ETCD_VERSION_UPGRADE_TO: "3.5.0-0"
+  KUBERNETES_VERSION_MANAGEMENT: "v1.23.3"
+  KUBERNETES_VERSION: "${KUBERNETES_VERSION:-v1.23.3}"
+  KUBERNETES_VERSION_UPGRADE_FROM: "v1.22.4"
+  KUBERNETES_VERSION_UPGRADE_TO: "v1.23.3"
+  ETCD_VERSION_UPGRADE_TO: "3.5.1-0"
   COREDNS_VERSION_UPGRADE_TO: "1.8.4"
 
   # Infra provider specific variables
@@ -144,6 +144,7 @@ variables:
   IP_FAMILY: "IPv4"
   CNI: "${CNI_PATH:=../../templates/addons/calico.yaml}"
   EXP_CLUSTER_RESOURCE_SET: "true"
+  EXP_KUBEADM_BOOTSTRAP_FORMAT_IGNITION: "true"
   KUBETEST_CONFIGURATION: "${KUBETEST_CONF_PATH:=./data/kubetest/conformance.yaml}"
   NODE_DRAIN_TIMEOUT: "60s"
 
@@ -152,7 +153,7 @@ variables:
   INIT_WITH_BINARY: "https://github.com/kubernetes-sigs/cluster-api/releases/download/v0.3.25/clusterctl-{OS}-{ARCH}"
   # CAPI v0.3.x cannot be deployed on Kubernetes >= v1.22.
   INIT_WITH_PROVIDERS_CONTRACT: "v1alpha3"
-  INIT_WITH_KUBERNETES_VERSION: "v1.21.2"
+  INIT_WITH_KUBERNETES_VERSION: "v1.22.4"
 
 intervals:
   default/wait-cluster: ["20m", "10s"]
@@ -167,5 +168,6 @@ intervals:
   default/wait-deployment: ["15m", "10s"]
   default/wait-deployment-available: ["15m", "10s"]
   default/wait-job: ["5m", "10s"]
+  default/wait-nodes-ready: ["10m", "10s"]
   default/wait-service: ["15m", "10s"]
   node-drain/wait-machine-deleted: ["10m", "10s"]

@@ -57,11 +57,11 @@ else
 endif
 
 # Binaries.
-CONTROLLER_GEN_VER := v0.7.0
+CONTROLLER_GEN_VER := v0.8.0
 CONTROLLER_GEN_BIN := controller-gen
 CONTROLLER_GEN := $(TOOLS_BIN_DIR)/$(CONTROLLER_GEN_BIN)-$(CONTROLLER_GEN_VER)
 
-CONVERSION_GEN_VER := v0.22.6
+CONVERSION_GEN_VER := v0.23.3
 CONVERSION_GEN_BIN := conversion-gen
 CONVERSION_GEN := $(TOOLS_BIN_DIR)/$(CONVERSION_GEN_BIN)-$(CONVERSION_GEN_VER)
 
@@ -69,7 +69,7 @@ ENVSUBST_VER := v1.2.0
 ENVSUBST_BIN := envsubst
 ENVSUBST := $(TOOLS_BIN_DIR)/$(ENVSUBST_BIN)
 
-GOLANGCI_LINT_VER := v1.42.1
+GOLANGCI_LINT_VER := v1.44.0
 GOLANGCI_LINT_BIN := golangci-lint
 GOLANGCI_LINT := $(TOOLS_BIN_DIR)/$(GOLANGCI_LINT_BIN)-$(GOLANGCI_LINT_VER)
 
@@ -118,7 +118,7 @@ endif
 # Build time versioning details.
 LDFLAGS := $(shell hack/version.sh)
 
-GOLANG_VERSION := 1.16.13
+GOLANG_VERSION := 1.17.7
 
 ## --------------------------------------
 ## Help

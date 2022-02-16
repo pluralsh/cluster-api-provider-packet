@@ -40,44 +40,50 @@ var _ = Describe("[Workload Upgrade] Running the Cluster API E2E Workload Cluste
 	// TODO: replace kcp upgrade spec tests with ClusterUpgradeConformanceSpec tests
 	//       for same functionality
 
-	Context("Running the cluster-upgrade spec", func() {
+	Context("Running the cluster-upgrade spec with single control plane instance", func() {
 		capi_e2e.ClusterUpgradeConformanceSpec(ctx, func() capi_e2e.ClusterUpgradeConformanceSpecInput {
 			return capi_e2e.ClusterUpgradeConformanceSpecInput{
-				E2EConfig:             e2eConfig,
-				ClusterctlConfigPath:  clusterctlConfigPath,
-				BootstrapClusterProxy: bootstrapClusterProxy,
-				ArtifactFolder:        artifactFolder,
-				SkipCleanup:           skipCleanup,
-				SkipConformanceTests:  true,
-				Flavor:                pointer.String(clusterctl.DefaultFlavor),
-			}
-		})
-	})
-
-	Context("Running the kcp-upgrade spec with HA control plane", func() {
-		capi_e2e.KCPUpgradeSpec(ctx, func() capi_e2e.KCPUpgradeSpecInput {
-			return capi_e2e.KCPUpgradeSpecInput{
 				E2EConfig:                e2eConfig,
 				ClusterctlConfigPath:     clusterctlConfigPath,
 				BootstrapClusterProxy:    bootstrapClusterProxy,
 				ArtifactFolder:           artifactFolder,
 				SkipCleanup:              skipCleanup,
-				ControlPlaneMachineCount: 3,
-				Flavor:                   clusterctl.DefaultFlavor,
+				SkipConformanceTests:     true,
+				ControlPlaneMachineCount: pointer.Int64(3),
+				WorkerMachineCount:       pointer.Int64(1),
+				Flavor:                   pointer.String(clusterctl.DefaultFlavor),
 			}
 		})
 	})
 
-	Context("Running the kcp-upgrade spec with HA control plane and scale-in", func() {
-		capi_e2e.KCPUpgradeSpec(ctx, func() capi_e2e.KCPUpgradeSpecInput {
-			return capi_e2e.KCPUpgradeSpecInput{
+	Context("Running the cluster-upgrade spec with HA control plane", func() {
+		capi_e2e.ClusterUpgradeConformanceSpec(ctx, func() capi_e2e.ClusterUpgradeConformanceSpecInput {
+			return capi_e2e.ClusterUpgradeConformanceSpecInput{
 				E2EConfig:                e2eConfig,
 				ClusterctlConfigPath:     clusterctlConfigPath,
 				BootstrapClusterProxy:    bootstrapClusterProxy,
 				ArtifactFolder:           artifactFolder,
 				SkipCleanup:              skipCleanup,
-				ControlPlaneMachineCount: 3,
-				Flavor:                   "kcp-scale-in",
+				SkipConformanceTests:     true,
+				ControlPlaneMachineCount: pointer.Int64(3),
+				WorkerMachineCount:       pointer.Int64(1),
+				Flavor:                   pointer.String(clusterctl.DefaultFlavor),
+			}
+		})
+	})
+
+	Context("Running the cluster-upgrade spec with HA control plane and scale-in", func() {
+		capi_e2e.ClusterUpgradeConformanceSpec(ctx, func() capi_e2e.ClusterUpgradeConformanceSpecInput {
+			return capi_e2e.ClusterUpgradeConformanceSpecInput{
+				E2EConfig:                e2eConfig,
+				ClusterctlConfigPath:     clusterctlConfigPath,
+				BootstrapClusterProxy:    bootstrapClusterProxy,
+				ArtifactFolder:           artifactFolder,
+				SkipCleanup:              skipCleanup,
+				SkipConformanceTests:     true,
+				ControlPlaneMachineCount: pointer.Int64(3),
+				WorkerMachineCount:       pointer.Int64(1),
+				Flavor:                   pointer.String("kcp-scale-in"),
 			}
 		})
 	})

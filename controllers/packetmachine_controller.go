@@ -120,7 +120,6 @@ func (r *PacketMachineReconciler) Reconcile(ctx context.Context, req ctrl.Reques
 
 	// Create the machine scope
 	machineScope, err := scope.NewMachineScope(ctx, scope.MachineScopeParams{
-		Logger:        log,
 		Client:        r.Client,
 		Cluster:       cluster,
 		Machine:       machine,
@@ -224,30 +223,31 @@ func (r *PacketMachineReconciler) PacketClusterToPacketMachines(ctx context.Cont
 }
 
 func (r *PacketMachineReconciler) reconcile(ctx context.Context, machineScope *scope.MachineScope) (ctrl.Result, error) { //nolint:gocyclo
-	machineScope.Info("Reconciling PacketMachine")
+	log := ctrl.LoggerFrom(ctx, "machine", machineScope.Machine, "cluster", machineScope.Cluster)
+	log.Info("Reconciling PacketMachine")
 
 	packetmachine := machineScope.PacketMachine
 	// If the PacketMachine is in an error state, return early.
 	if packetmachine.Status.FailureReason != nil || packetmachine.Status.FailureMessage != nil {
-		machineScope.Info("Error state detected, skipping reconciliation")
+		log.Info("Error state detected, skipping reconciliation")
 		return ctrl.Result{}, nil
 	}
 
 	// If the PacketMachine doesn't have our finalizer, add it.
 	controllerutil.AddFinalizer(packetmachine, infrav1.MachineFinalizer)
 	if err := machineScope.PatchObject(ctx); err != nil {
-		machineScope.Error(err, "unable to patch object")
+		log.Error(err, "unable to patch object")
 	}
 
 	if !machineScope.Cluster.Status.InfrastructureReady {
-		machineScope.Info("Cluster infrastructure is not ready yet")
+		log.Info("Cluster infrastructure is not ready yet")
 		conditions.MarkFalse(machineScope.PacketMachine, infrav1.DeviceReadyCondition, infrav1.WaitingForClusterInfrastructureReason, clusterv1.ConditionSeverityInfo, "")
 		return ctrl.Result{}, nil
 	}
 
 	// Make sure bootstrap data secret is available and populated.
 	if machineScope.Machine.Spec.Bootstrap.DataSecretName == nil {
-		machineScope.Info("Bootstrap data secret is not yet available")
+		log.Info("Bootstrap data secret is not yet available")
 		conditions.MarkFalse(machineScope.PacketMachine, infrav1.DeviceReadyCondition, infrav1.WaitingForBootstrapDataReason, clusterv1.ConditionSeverityInfo, "")
 		return ctrl.Result{}, nil
 	}
@@ -271,11 +271,11 @@ func (r *PacketMachineReconciler) reconcile(ctx context.Context, machineScope *s
 				if perr.Response.StatusCode == http.StatusNotFound {
 					machineScope.SetFailureReason(capierrors.UpdateMachineError)
 					machineScope.SetFailureMessage(fmt.Errorf("failed to find device: %w", err))
-					machineScope.Error(err, "unable to find device")
+					log.Error(err, "unable to find device")
 					conditions.MarkFalse(machineScope.PacketMachine, infrav1.DeviceReadyCondition, infrav1.InstanceNotFoundReason, clusterv1.ConditionSeverityError, err.Error())
 				} else if perr.Response.StatusCode == http.StatusForbidden {
 					machineScope.SetFailureReason(capierrors.UpdateMachineError)
-					machineScope.Error(err, "device failed to provision")
+					log.Error(err, "device failed to provision")
 					machineScope.SetFailureMessage(fmt.Errorf("device failed to provision: %w", err))
 					conditions.MarkFalse(machineScope.PacketMachine, infrav1.DeviceReadyCondition, infrav1.InstanceProvisionFailedReason, clusterv1.ConditionSeverityError, err.Error())
 				}
@@ -306,7 +306,7 @@ func (r *PacketMachineReconciler) reconcile(ctx context.Context, machineScope *s
 		if conditions.GetReason(machineScope.PacketMachine, infrav1.DeviceReadyCondition) != infrav1.InstanceProvisionFailedReason {
 			conditions.MarkFalse(machineScope.PacketMachine, infrav1.DeviceReadyCondition, infrav1.InstanceProvisionStartedReason, clusterv1.ConditionSeverityInfo, "")
 			if patchErr := machineScope.PatchObject(ctx); err != nil {
-				machineScope.Error(patchErr, "failed to patch conditions")
+				log.Error(patchErr, "failed to patch conditions")
 				return ctrl.Result{}, patchErr
 			}
 		}
@@ -370,11 +370,11 @@ func (r *PacketMachineReconciler) reconcile(ctx context.Context, machineScope *s
 
 	switch infrav1.PacketResourceStatus(dev.State) {
 	case infrav1.PacketResourceStatusNew, infrav1.PacketResourceStatusQueued, infrav1.PacketResourceStatusProvisioning:
-		machineScope.Info("Machine instance is pending", "instance-id", machineScope.GetInstanceID())
+		log.Info("Machine instance is pending", "instance-id", machineScope.GetInstanceID())
 		machineScope.SetNotReady()
 		result = ctrl.Result{RequeueAfter: 10 * time.Second}
 	case infrav1.PacketResourceStatusRunning:
-		machineScope.Info("Machine instance is active", "instance-id", machineScope.GetInstanceID())
+		log.Info("Machine instance is active", "instance-id", machineScope.GetInstanceID())
 
 		// TODO: see if this can be removed with kube-vip in place
 		// This logic is here because an elastic ip can be assigned only an
@@ -388,7 +388,7 @@ func (r *PacketMachineReconciler) reconcile(ctx context.Context, machineScope *s
 			if _, _, err := r.PacketClient.DeviceIPs.Assign(dev.ID, &packngo.AddressStruct{
 				Address: controlPlaneEndpoint.Address,
 			}); err != nil {
-				machineScope.Error(err, "err assigining elastic ip to control plane. retrying...")
+				log.Error(err, "err assigining elastic ip to control plane. retrying...")
 				return ctrl.Result{RequeueAfter: time.Second * 20}, nil
 			}
 		}
@@ -398,7 +398,7 @@ func (r *PacketMachineReconciler) reconcile(ctx context.Context, machineScope *s
 		result = ctrl.Result{}
 	default:
 		machineScope.SetNotReady()
-		machineScope.Info("Equinix Metal device state is undefined", "state", dev.State, "device-id", machineScope.GetInstanceID())
+		log.Info("Equinix Metal device state is undefined", "state", dev.State, "device-id", machineScope.GetInstanceID())
 		machineScope.SetFailureReason(capierrors.UpdateMachineError)
 		machineScope.SetFailureMessage(fmt.Errorf("instance status %q is unexpected", dev.State)) //nolint:goerr113
 		conditions.MarkUnknown(machineScope.PacketMachine, infrav1.DeviceReadyCondition, "", "")
@@ -409,8 +409,9 @@ func (r *PacketMachineReconciler) reconcile(ctx context.Context, machineScope *s
 	return result, nil
 }
 
-func (r *PacketMachineReconciler) reconcileDelete(_ context.Context, machineScope *scope.MachineScope) (ctrl.Result, error) {
-	machineScope.Info("Reconciling Delete PacketMachine")
+func (r *PacketMachineReconciler) reconcileDelete(ctx context.Context, machineScope *scope.MachineScope) (ctrl.Result, error) {
+	log := ctrl.LoggerFrom(ctx, "machine", machineScope.Machine, "cluster", machineScope.Cluster)
+	log.Info("Reconciling Delete PacketMachine")
 
 	packetmachine := machineScope.PacketMachine
 	providerID := machineScope.GetInstanceID()
@@ -429,7 +430,7 @@ func (r *PacketMachineReconciler) reconcileDelete(_ context.Context, machineScop
 		}
 
 		if dev == nil {
-			machineScope.Info("Server not found by tags, nothing left to do")
+			log.Info("Server not found by tags, nothing left to do")
 			controllerutil.RemoveFinalizer(packetmachine, infrav1.MachineFinalizer)
 			return ctrl.Result{}, nil
 		}
@@ -444,14 +445,14 @@ func (r *PacketMachineReconciler) reconcileDelete(_ context.Context, machineScop
 				if errResp.Response.StatusCode == http.StatusNotFound {
 					// When the server does not exist we do not have anything left to do.
 					// Probably somebody manually deleted the server from the UI or via API.
-					machineScope.Info("Server not found by id, nothing left to do")
+					log.Info("Server not found by id, nothing left to do")
 					controllerutil.RemoveFinalizer(packetmachine, infrav1.MachineFinalizer)
 					return ctrl.Result{}, nil
 				}
 
 				if errResp.Response.StatusCode == http.StatusForbidden {
 					// When a server fails to provision it will return a 403
-					machineScope.Info("Server appears to have failed provisioning, nothing left to do")
+					log.Info("Server appears to have failed provisioning, nothing left to do")
 					controllerutil.RemoveFinalizer(packetmachine, infrav1.MachineFinalizer)
 					return ctrl.Result{}, nil
 				}
