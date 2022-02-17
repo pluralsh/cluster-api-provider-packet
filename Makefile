@@ -178,6 +178,8 @@ clean-e2e-artifacts: ## Remove the release folder
 
 .PHONY: run-e2e-tests
 run-e2e-tests: $(KUBECTL) $(KUSTOMIZE) $(KIND) $(GINKGO) $(E2E_CONF_FILE) e2e-test-templates $(if $(SKIP_IMAGE_BUILD),,e2e-image) ## Run the e2e tests
+	$(MAKE) set-manifest-image MANIFEST_IMG=$(REGISTRY)/$(IMAGE_NAME) MANIFEST_TAG=$(TAG)
+	$(MAKE) set-manifest-pull-policy PULL_POLICY=IfNotPresent
 	cd test/e2e; time $(GINKGO) -v -trace -progress -v -tags=e2e \
 		--randomizeAllSpecs -race $(GINKGO_ADDITIONAL_ARGS) \
 		-focus=$(GINKGO_FOCUS) -skip=$(GINKGO_SKIP) \
