@@ -28,8 +28,6 @@ import (
 var _ = Describe("[General] Running the Cluster API E2E tests", func() {
 	ctx := context.TODO()
 
-	// TODO: make sure we are testing with packet ccm, CPEM, and without CPEM
-
 	// The following upstream tests are not implemented because we do not support the features
 	// tested:
 	// - capi_e2e.KCPAdoptionSpec

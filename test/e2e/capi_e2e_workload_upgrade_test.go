@@ -30,15 +30,10 @@ import (
 var _ = Describe("[Workload Upgrade] Running the Cluster API E2E Workload Cluster Upgrade tests", func() {
 	ctx := context.TODO()
 
-	// TODO: make sure we are testing with packet ccm, CPEM, and without CPEM
-
 	// The following upstream tests are not implemented because they are subsets of
 	// capi_e2e.ClusterUpgradeConformanceSpec:
 	// - capi_e2e.MachineDeploymentScaleSpec
 	// - capi_e2e.MachineDeploymentRolloutSpec
-	// - capi_e2e.KCPUpgradeSpec w/ ControlPlaneMachineCount = 1
-	// TODO: replace kcp upgrade spec tests with ClusterUpgradeConformanceSpec tests
-	//       for same functionality
 
 	Context("Running the cluster-upgrade spec with single control plane instance", func() {
 		capi_e2e.ClusterUpgradeConformanceSpec(ctx, func() capi_e2e.ClusterUpgradeConformanceSpecInput {

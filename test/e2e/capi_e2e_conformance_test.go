@@ -30,8 +30,6 @@ import (
 var _ = Describe("[Conformance] Running the Cluster API E2E Conformance tests", func() {
 	ctx := context.TODO()
 
-	// TODO: make sure we are testing conformance with packet ccm, CPEM, and without CPEM
-
 	Context("Running the k8s-conformance spec", func() {
 		capi_e2e.K8SConformanceSpec(ctx, func() capi_e2e.K8SConformanceSpecInput {
 			return capi_e2e.K8SConformanceSpecInput{
