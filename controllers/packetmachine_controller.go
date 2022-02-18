@@ -349,6 +349,15 @@ func (r *PacketMachineReconciler) reconcile(ctx context.Context, machineScope *s
 		case err != nil && strings.Contains(err.Error(), " unexpected EOF"):
 			// Do not treat unexpected EOF as fatal, provisioning likely is proceeding
 		case err != nil:
+			var perr *packngo.ErrorResponse
+			if errors.As(err, &perr) && perr.Response != nil {
+				// Swallow 403 errors for now because we appear to be getting it intermittently for some reason
+				// TODO: address with engineering properly
+				if perr.Response.StatusCode == http.StatusForbidden {
+					return ctrl.Result{}, fmt.Errorf("failed to create machine %s: %w", machineScope.Name(), err)
+				}
+			}
+
 			errs := fmt.Errorf("failed to create machine %s: %w", machineScope.Name(), err)
 			machineScope.SetFailureReason(capierrors.CreateMachineError)
 			machineScope.SetFailureMessage(errs)
