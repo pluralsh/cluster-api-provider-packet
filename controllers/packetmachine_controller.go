@@ -223,7 +223,7 @@ func (r *PacketMachineReconciler) PacketClusterToPacketMachines(ctx context.Cont
 }
 
 func (r *PacketMachineReconciler) reconcile(ctx context.Context, machineScope *scope.MachineScope) (ctrl.Result, error) { //nolint:gocyclo
-	log := ctrl.LoggerFrom(ctx, "machine", machineScope.Machine, "cluster", machineScope.Cluster)
+	log := ctrl.LoggerFrom(ctx, "machine", machineScope.Machine.Name, "cluster", machineScope.Cluster.Name)
 	log.Info("Reconciling PacketMachine")
 
 	packetmachine := machineScope.PacketMachine
@@ -410,7 +410,7 @@ func (r *PacketMachineReconciler) reconcile(ctx context.Context, machineScope *s
 }
 
 func (r *PacketMachineReconciler) reconcileDelete(ctx context.Context, machineScope *scope.MachineScope) (ctrl.Result, error) {
-	log := ctrl.LoggerFrom(ctx, "machine", machineScope.Machine, "cluster", machineScope.Cluster)
+	log := ctrl.LoggerFrom(ctx, "machine", machineScope.Machine.Name, "cluster", machineScope.Cluster.Name)
 	log.Info("Reconciling Delete PacketMachine")
 
 	packetmachine := machineScope.PacketMachine
