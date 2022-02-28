@@ -148,33 +148,11 @@ E2E_DIR ?= $(REPO_ROOT)/test/e2e
 KUBETEST_CONF_PATH ?= $(abspath $(E2E_DIR)/data/kubetest/conformance.yaml)
 E2E_CONF_FILE_SOURCE ?= $(E2E_DIR)/config/packet-ci.yaml
 E2E_CONF_FILE ?= $(E2E_DIR)/config/packet-ci-envsubst.yaml
-E2E_ARTIFACTS_DIR ?= ./out/e2e
-E2E_ARTIFACTS_CONF_FILE_SOURCE ?= $(E2E_DIR)/config/packet-ci-actions.yaml
-E2E_ARTIFACTS_CONF_FILE ?= $(E2E_ARTIFACTS_DIR)/config/e2e-config.yaml
 
+.PHONY: $(E2E_CONF_FILE)
 $(E2E_CONF_FILE): $(ENVSUBST) $(E2E_CONF_FILE_SOURCE)
 	mkdir -p $(shell dirname $(E2E_CONF_FILE))
 	$(ENVSUBST) < $(E2E_CONF_FILE_SOURCE) > $(E2E_CONF_FILE)
-
-$(E2E_ARTIFACTS_DIR):
-	mkdir -p $(E2E_ARTIFACTS_DIR)/
-
-.PHONY: e2e-artifacts
-e2e-artifacts: clean-e2e-artifacts $(E2E_ARTIFACTS_DIR) $(ENVSUBST) $(KUSTOMIZE) $(GINKGO) ## Build e2e test artifacts
-	$(MAKE) set-manifest-image MANIFEST_IMG=$(REGISTRY)/$(IMAGE_NAME) MANIFEST_TAG=$(TAG)
-	$(MAKE) set-manifest-pull-policy PULL_POLICY=IfNotPresent
-	$(MAKE) release-manifests release-metadata e2e-test-templates $(E2E_ARTIFACTS_CONF_FILE) RELEASE_DIR=$(E2E_ARTIFACTS_DIR) TEST_TEMPLATES_TARGET_DIR=$(E2E_ARTIFACTS_DIR)/data E2E_CONF_FILE_SOURCE=$(E2E_ARTIFACTS_CONF_FILE_SOURCE) E2E_CONF_FILE=$(E2E_ARTIFACTS_CONF_FILE)
-	cp -r templates/addons $(E2E_ARTIFACTS_DIR)/
-	mkdir -p $(E2E_ARTIFACTS_DIR)/data/kubetest
-	cp test/e2e/data/kubetest/conformance.yaml $(E2E_ARTIFACTS_DIR)/data/kubetest/
-	mkdir -p $(E2E_ARTIFACTS_DIR)/data/shared/v1beta1
-	cp test/e2e/data/shared/v1beta1/metadata.yaml $(E2E_ARTIFACTS_DIR)/data/shared/v1beta1/
-	cd test/e2e; $(GINKGO) build -tags=e2e ./
-	mv test/e2e/e2e.test $(E2E_ARTIFACTS_DIR)/
-
-.PHONY: clean-e2e-artifacts
-clean-e2e-artifacts: ## Remove the release folder
-	rm -rf $(E2E_ARTIFACTS_DIR)
 
 .PHONY: run-e2e-tests
 run-e2e-tests: $(KUBECTL) $(KUSTOMIZE) $(KIND) $(GINKGO) $(E2E_CONF_FILE) e2e-test-templates $(if $(SKIP_IMAGE_BUILD),,e2e-image) ## Run the e2e tests
