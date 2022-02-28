@@ -57,11 +57,7 @@ func NewClient(packetAPIKey string) *Client {
 	token := strings.TrimSpace(packetAPIKey)
 
 	if token != "" {
-		// TODO: re-enable default endpoint, hacky workaround to issue that cropped up with
-		// Worker node creations being blocked by WAF in front of default URL
-		// return &Client{packngo.NewClientWithAuth(clientName, token, nil)}
-		c, _ := packngo.NewClientWithBaseURL(clientName, token, nil, "https://api.packet.net/")
-		return &Client{c}
+		return &Client{packngo.NewClientWithAuth(clientName, token, nil)}
 	}
 
 	return nil
@@ -87,9 +83,6 @@ type CreateDeviceRequest struct {
 }
 
 func (p *Client) NewDevice(ctx context.Context, req CreateDeviceRequest) (*packngo.Device, error) {
-	// log := ctrl.LoggerFrom(ctx, "machine", req.MachineScope.Machine.Name, "cluster", req.MachineScope.Cluster.Name)
-	// log.Info("NewDevice")
-
 	if req.MachineScope.PacketMachine.Spec.IPXEUrl != "" {
 		// Error if pxe url and OS conflict
 		if req.MachineScope.PacketMachine.Spec.OS != ipxeOS {
@@ -155,8 +148,6 @@ func (p *Client) NewDevice(ctx context.Context, req CreateDeviceRequest) (*packn
 	}
 
 	reservationIDs := strings.Split(req.MachineScope.PacketMachine.Spec.HardwareReservationID, ",")
-
-	// log.Info("Creating device", "request", serverCreateOpts)
 
 	// If there are no reservationIDs to process, go ahead and return early
 	if len(reservationIDs) == 0 {
