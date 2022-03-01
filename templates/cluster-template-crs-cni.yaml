@@ -147,7 +147,7 @@ spec:
         netmask 255.255.255.255
       EOF
     - systemctl restart networking
-    - |-
+    - |
       if [ -f "/run/kubeadm/kubeadm.yaml" ]; then
         export KUBECONFIG=/etc/kubernetes/admin.conf
         export CPEM_YAML=https://raw.githubusercontent.com/detiber/packet-ccm/test/deploy/template/deployment.yaml

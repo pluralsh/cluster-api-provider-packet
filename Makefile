@@ -65,7 +65,7 @@ CONVERSION_GEN_VER := v0.23.3
 CONVERSION_GEN_BIN := conversion-gen
 CONVERSION_GEN := $(TOOLS_BIN_DIR)/$(CONVERSION_GEN_BIN)-$(CONVERSION_GEN_VER)
 
-ENVSUBST_VER := v1.2.0
+ENVSUBST_VER := v2.0.0-20210730161058-179042472c46
 ENVSUBST_BIN := envsubst
 ENVSUBST := $(TOOLS_BIN_DIR)/$(ENVSUBST_BIN)
 
@@ -73,7 +73,7 @@ GOLANGCI_LINT_VER := v1.44.0
 GOLANGCI_LINT_BIN := golangci-lint
 GOLANGCI_LINT := $(TOOLS_BIN_DIR)/$(GOLANGCI_LINT_BIN)-$(GOLANGCI_LINT_VER)
 
-KUSTOMIZE_VER := v3.9.1
+KUSTOMIZE_VER := v4.0.4
 KUSTOMIZE_BIN := kustomize
 KUSTOMIZE := $(TOOLS_BIN_DIR)/$(KUSTOMIZE_BIN)-$(KUSTOMIZE_VER)
 
@@ -81,7 +81,7 @@ GINKGO_VER := v1.16.5
 GINKGO_BIN := ginkgo
 GINKGO := $(TOOLS_BIN_DIR)/$(GINKGO_BIN)-$(GINKGO_VER)
 
-KUBECTL_VER := v1.20.4
+KUBECTL_VER := v1.21.2
 KUBECTL_BIN := kubectl
 KUBECTL := $(TOOLS_BIN_DIR)/$(KUBECTL_BIN)-$(KUBECTL_VER)
 
@@ -93,7 +93,7 @@ TIMEOUT := $(shell command -v timeout || command -v gtimeout)
 
 # Define Docker related variables. Releases should modify and double check these vars.
 REGISTRY ?= ghcr.io
-IMAGE_NAME ?= kubernetes-sigs/cluster-api-provider-packet
+export IMAGE_NAME ?= kubernetes-sigs/cluster-api-provider-packet
 export CONTROLLER_IMG ?= $(REGISTRY)/$(IMAGE_NAME)
 export TAG ?= dev
 export ARCH ?= amd64
@@ -203,29 +203,29 @@ e2e-test-templates: $(KUSTOMIZE) e2e-test-templates-v1alpha3 e2e-test-templates-
 
 e2e-test-templates-v1alpha3: $(KUSTOMIZE) ## Generate cluster templates for v1alpha3
 	mkdir -p $(TEST_TEMPLATES_TARGET_DIR)/v1alpha3/
-	$(KUSTOMIZE) build $(REPO_ROOT)/test/e2e/data/v1alpha3/cluster-template-packet-ccm --load_restrictor none > $(TEST_TEMPLATES_TARGET_DIR)/v1alpha3/cluster-template-packet-ccm.yaml
-	$(KUSTOMIZE) build $(REPO_ROOT)/test/e2e/data/v1alpha3/cluster-template-cpem --load_restrictor none > $(TEST_TEMPLATES_TARGET_DIR)/v1alpha3/cluster-template-cpem.yaml
+	$(KUSTOMIZE) build $(REPO_ROOT)/test/e2e/data/v1alpha3/cluster-template-packet-ccm --load-restrictor LoadRestrictionsNone > $(TEST_TEMPLATES_TARGET_DIR)/v1alpha3/cluster-template-packet-ccm.yaml
+	$(KUSTOMIZE) build $(REPO_ROOT)/test/e2e/data/v1alpha3/cluster-template-cpem --load-restrictor LoadRestrictionsNone > $(TEST_TEMPLATES_TARGET_DIR)/v1alpha3/cluster-template-cpem.yaml
 
 e2e-test-templates-v1beta1: $(KUSTOMIZE) ## Generate cluster templates for v1beta1
 	mkdir -p $(TEST_TEMPLATES_TARGET_DIR)/v1beta1/
-	$(KUSTOMIZE) build $(REPO_ROOT)/templates/experimental-crs-cni --load_restrictor none > $(TEST_TEMPLATES_TARGET_DIR)/v1beta1/cluster-template.yaml
-	$(KUSTOMIZE) build $(REPO_ROOT)/test/e2e/data/v1beta1/cluster-template-kcp-scale-in --load_restrictor none > $(TEST_TEMPLATES_TARGET_DIR)/v1beta1/cluster-template-kcp-scale-in.yaml
-	$(KUSTOMIZE) build $(REPO_ROOT)/test/e2e/data/v1beta1/cluster-template-node-drain --load_restrictor none > $(TEST_TEMPLATES_TARGET_DIR)/v1beta1/cluster-template-node-drain.yaml
-	$(KUSTOMIZE) build $(REPO_ROOT)/test/e2e/data/v1beta1/cluster-template-md-remediation --load_restrictor none > $(TEST_TEMPLATES_TARGET_DIR)/v1beta1/cluster-template-md-remediation.yaml
-	$(KUSTOMIZE) build $(REPO_ROOT)/test/e2e/data/v1beta1/cluster-template-kcp-remediation --load_restrictor none > $(TEST_TEMPLATES_TARGET_DIR)/v1beta1/cluster-template-kcp-remediation.yaml
+	$(KUSTOMIZE) build $(REPO_ROOT)/templates/experimental-crs-cni --load-restrictor LoadRestrictionsNone > $(TEST_TEMPLATES_TARGET_DIR)/v1beta1/cluster-template.yaml
+	$(KUSTOMIZE) build $(REPO_ROOT)/test/e2e/data/v1beta1/cluster-template-kcp-scale-in --load-restrictor LoadRestrictionsNone > $(TEST_TEMPLATES_TARGET_DIR)/v1beta1/cluster-template-kcp-scale-in.yaml
+	$(KUSTOMIZE) build $(REPO_ROOT)/test/e2e/data/v1beta1/cluster-template-node-drain --load-restrictor LoadRestrictionsNone > $(TEST_TEMPLATES_TARGET_DIR)/v1beta1/cluster-template-node-drain.yaml
+	$(KUSTOMIZE) build $(REPO_ROOT)/test/e2e/data/v1beta1/cluster-template-md-remediation --load-restrictor LoadRestrictionsNone > $(TEST_TEMPLATES_TARGET_DIR)/v1beta1/cluster-template-md-remediation.yaml
+	$(KUSTOMIZE) build $(REPO_ROOT)/test/e2e/data/v1beta1/cluster-template-kcp-remediation --load-restrictor LoadRestrictionsNone > $(TEST_TEMPLATES_TARGET_DIR)/v1beta1/cluster-template-kcp-remediation.yaml
 
 ## --------------------------------------
 ## Tooling Binaries
 ## --------------------------------------
 
 $(ENVSUBST): ## Build envsubst from tools folder.
-	GOBIN=$(TOOLS_BIN_DIR) $(GO_INSTALL) github.com/a8m/envsubst/cmd/envsubst $(ENVSUBST_BIN) $(ENVSUBST_VER)
+	GOBIN=$(TOOLS_BIN_DIR) $(GO_INSTALL) github.com/drone/envsubst/v2/cmd/envsubst $(ENVSUBST_BIN) $(ENVSUBST_VER)
 
 $(GOLANGCI_LINT): ## Build golangci-lint from tools folder.
 	GOBIN=$(TOOLS_BIN_DIR) $(GO_INSTALL) github.com/golangci/golangci-lint/cmd/golangci-lint $(GOLANGCI_LINT_BIN) $(GOLANGCI_LINT_VER)
 
 $(KUSTOMIZE): ## Build kustomize from tools folder.
-	GOBIN=$(TOOLS_BIN_DIR) $(GO_INSTALL) sigs.k8s.io/kustomize/kustomize/v3 $(KUSTOMIZE_BIN) $(KUSTOMIZE_VER)
+	GOBIN=$(TOOLS_BIN_DIR) $(GO_INSTALL) sigs.k8s.io/kustomize/kustomize/v4 $(KUSTOMIZE_BIN) $(KUSTOMIZE_VER)
 
 $(CONTROLLER_GEN): ## Build controller-gen from tools folder.
 	GOBIN=$(TOOLS_BIN_DIR) $(GO_INSTALL) sigs.k8s.io/controller-tools/cmd/controller-gen $(CONTROLLER_GEN_BIN) $(CONTROLLER_GEN_VER)
@@ -275,7 +275,7 @@ generate: ## Generate code
 
 .PHONY: generate-templates
 generate-templates: $(KUSTOMIZE) ## Generate cluster templates
-	$(KUSTOMIZE) build templates/experimental-crs-cni --load_restrictor none > templates/cluster-template-crs-cni.yaml
+	$(KUSTOMIZE) build templates/experimental-crs-cni --load-restrictor LoadRestrictionsNone > templates/cluster-template-crs-cni.yaml
 	$(KUSTOMIZE) build templates/addons/calico > templates/addons/calico.yaml
 
 .PHONY: generate-go
