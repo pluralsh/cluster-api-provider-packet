@@ -50,14 +50,6 @@ jobs:
       uses: docker/setup-qemu-action@v1
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
-    - name: Cache Docker layers
-      uses: actions/cache@v2
-      with:
-        path: /tmp/.buildx-cache
-        key: ${{ runner.os }}-buildx-manager-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-buildx-manager-
-          ${{ runner.os }}-buildx-
     - name: Docker manager metadata
       id: meta
       uses: docker/metadata-action@v3
@@ -79,15 +71,8 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         platforms: linux/amd64,linux/arm64
-        cache-from: type=local,src=/tmp/.buildx-cache
-        cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
-    - name: Move cache
-      # Temp fix
-      # https://github.com/docker/build-push-action/issues/252
-      # https://github.com/moby/buildkit/issues/1896
-      run: |
-        rm -rf /tmp/.buildx-cache
-        mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+        cache-from: type=gha, scope=${{ github.workflow }}
+        cache-to: type=gha, mode=max, scope=${{ github.workflow }}
   test-release:
     name: Test Release
     runs-on: ubuntu-latest
