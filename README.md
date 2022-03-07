@@ -10,6 +10,44 @@ This is the official [cluster-api](https://github.com/kubernetes-sigs/cluster-ap
 
 ![Packetbot works hard to keep Kubernetes cluster in a good shape](./docs/banner.png)
 
+## Ugrading from v0.3.X to v1.1.X
+
+* Upgrade your clusterctl to version 1.1.2 or later.
+* Backup your clusterapi objects from your management cluster by using the `clusterctl backup` comamnd.
+
+```bash
+clusterctl backup --directory /path/to/backup/directory/
+```
+
+* More details are available [here](https://cluster-api.sigs.k8s.io/clusterctl/commands/upgrade.html).
+* The next step is to run `clusterctl upgrade plan`, and you should see something like this:
+
+```bash
+Latest release available for the v1beta1 API Version of Cluster API (contract):
+
+NAME                    NAMESPACE                            TYPE                     CURRENT VERSION   NEXT VERSION
+bootstrap-kubeadm       capi-kubeadm-bootstrap-system        BootstrapProvider        v0.3.25           v1.1.2
+control-plane-kubeadm   capi-kubeadm-control-plane-system    ControlPlaneProvider     v0.3.25           v1.1.2
+cluster-api             capi-system                          CoreProvider             v0.3.25           v1.1.2
+infrastructure-packet   cluster-api-provider-packet-system   InfrastructureProvider   v0.3.11           v0.5.0
+
+You can now apply the upgrade by executing the following command:
+
+clusterctl upgrade apply --contract v1beta1
+```
+
+* Go ahead and run `clusterctl upgrade apply --contract v1beta1`
+* After this, if you'd like to co ntinue and upgrade kubernetes, it's a normal upgrade flow where you upgrade the control plane by editing the machinetemplates and kubeadmcontrolplane and the workers by editing the machinesets and machinedeployments. Full details [here](https://cluster-api.sigs.k8s.io/tasks/upgrading-clusters.html). Below is a very basic example upgrade of a small cluster:
+
+```bash
+kubectl get PacketMachineTemplate example-control-plane -o yaml > example-control-plane.yaml
+# Using a text editor, edit the spec.version field to the new kubernetes version
+kubectl apply -f example-control-plane.yaml
+kubectl get machineDeployment example-worker-a -o yaml > example-worker-a.yaml
+# Using a text editor, edit the spec.template.spec.version to the new kubernetes version
+kubectl apply -f example-worker-a.yaml
+```
+
 ## Using
 
 The following section describes how to use the cluster-api provider for packet (CAPP) as a regular user.
@@ -37,9 +75,9 @@ Once you have your cluster, ensure your `KUBECONFIG` environment variable is set
 
 ### Getting Started
 
-You can follow the [Cluster API Quick Start Guide](https://cluster-api.sigs.k8s.io/user/quick-start.html), selecting the 'Packet' tabs. 
+You can follow the [Cluster API Quick Start Guide](https://cluster-api.sigs.k8s.io/user/quick-start.html), selecting the 'Equinix Metal' tabs.
 
-##### Defaults
+#### Defaults
 
 If you do not change the generated `yaml` files, it will use defaults. You can look in the [templates/cluster-template.yaml](./templates/cluster-template.yaml) file for details.
 
@@ -53,8 +91,8 @@ Learn how to engage with the Kubernetes community on the [community page](http:/
 
 You can reach the maintainers of this project at:
 
-- Chat with us on [Slack](http://slack.k8s.io/) in the [#cluster-api-provider-packet][#cluster-api-provider-packet slack] channel
-- Subscribe to the [SIG Cluster Lifecycle](https://groups.google.com/forum/#!forum/kubernetes-sig-cluster-lifecycle) Google Group for access to documents and calendars
+* Chat with us on [Slack](http://slack.k8s.io/) in the [#cluster-api-provider-packet][#cluster-api-provider-packet slack] channel
+* Subscribe to the [SIG Cluster Lifecycle](https://groups.google.com/forum/#!forum/kubernetes-sig-cluster-lifecycle) Google Group for access to documents and calendars
 
 ### Code of conduct
 
