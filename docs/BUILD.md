@@ -1,6 +1,6 @@
 # Building and Running
 
-This document describes how to build and iterate upon the Packet infrastructure provider.
+This document describes how to build and iterate upon the Equinix Metal (formerly Packet) infrastructure provider.
 
 This is _not_ intended for regular users.
 

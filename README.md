@@ -37,9 +37,9 @@ Once you have your cluster, ensure your `KUBECONFIG` environment variable is set
 
 ### Getting Started
 
-You can follow the [Cluster API Quick Start Guide](https://cluster-api.sigs.k8s.io/user/quick-start.html), selecting the 'Packet' tabs. 
+You can follow the [Cluster API Quick Start Guide](https://cluster-api.sigs.k8s.io/user/quick-start.html), selecting the 'Equinix Metal' tabs.
 
-##### Defaults
+#### Defaults
 
 If you do not change the generated `yaml` files, it will use defaults. You can look in the [templates/cluster-template.yaml](./templates/cluster-template.yaml) file for details.
 
@@ -53,8 +53,8 @@ Learn how to engage with the Kubernetes community on the [community page](http:/
 
 You can reach the maintainers of this project at:
 
-- Chat with us on [Slack](http://slack.k8s.io/) in the [#cluster-api-provider-packet][#cluster-api-provider-packet slack] channel
-- Subscribe to the [SIG Cluster Lifecycle](https://groups.google.com/forum/#!forum/kubernetes-sig-cluster-lifecycle) Google Group for access to documents and calendars
+* Chat with us on [Slack](http://slack.k8s.io/) in the [#cluster-api-provider-packet][#cluster-api-provider-packet slack] channel
+* Subscribe to the [SIG Cluster Lifecycle](https://groups.google.com/forum/#!forum/kubernetes-sig-cluster-lifecycle) Google Group for access to documents and calendars
 
 ### Code of conduct
 

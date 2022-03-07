@@ -1,6 +1,6 @@
 # Release
 
-This document describes how to release the Packet infrastructure provider.
+This document describes how to release the Equinix Metal (formerly Packet) infrastructure provider.
 
 This is _not_ intended for regular users.
 
