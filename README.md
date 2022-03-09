@@ -12,7 +12,12 @@ This is the official [cluster-api](https://github.com/kubernetes-sigs/cluster-ap
 
 ## Ugrading from v0.3.X to v1.1.X
 
-* Upgrade your clusterctl to version 1.1.2 or later.
+* **IMPORTANT** - Before you upgrade, please note that multi-tenancy support has changed in versions after v0.3.X
+  * We no longer support running multiple instances of the provider in the same management cluster. Typically this was done to enable multiple credentials for managing devices in more than one project.
+  * If you currently have a management cluster with multiple instances of the provider, it's recommended you use clusterctl move to migrate them to another cluster before upgrading.
+  * [See more information about `clusterctl move` here](https://cluster-api.sigs.k8s.io/clusterctl/commands/move.html)
+
+* Upgrade your clusterctl to version 1.1.3 or later.
 * Backup your clusterapi objects from your management cluster by using the `clusterctl backup` comamnd.
 
 ```bash
