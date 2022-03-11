@@ -114,10 +114,6 @@ func deleteIPs(metalClient *packngo.Client, ips []packngo.IPAddressReservation) 
 	var errs []error
 
 	for _, ip := range ips {
-		if len(ip.Tags) < 1 || len(ip.Tags) > 1 || !strings.HasPrefix(ip.Tags[0], "cluster-api-provider-packet:cluster-id:") {
-			continue
-		}
-
 		created, err := time.Parse(time.RFC3339, ip.Created)
 		if err != nil {
 			errs = append(errs, fmt.Errorf("failed to parse creation time for ip address %q: %w", ip.Address, err))
@@ -125,10 +121,16 @@ func deleteIPs(metalClient *packngo.Client, ips []packngo.IPAddressReservation) 
 		}
 
 		if time.Since(created) > 4*time.Hour {
-			fmt.Printf("Deleting IP: %s\n", ip.Address)
-			_, err := metalClient.ProjectIPs.Remove(ip.ID)
-			if err != nil {
-				errs = append(errs, fmt.Errorf("failed to delete ip address %q: %w", ip.Address, err))
+			for _, tag := range ip.Tags {
+				if strings.HasPrefix(tag, "cluster-api-provider-packet:cluster-id:") || strings.HasPrefix(tag, "usage=cloud-provider-equinix-metal-auto") {
+					fmt.Printf("Deleting IP: %s\n", ip.Address)
+
+					if _, err := metalClient.ProjectIPs.Remove(ip.ID); err != nil {
+						errs = append(errs, fmt.Errorf("failed to delete ip address %q: %w", ip.Address, err))
+					}
+
+					break
+				}
 			}
 		}
 	}
