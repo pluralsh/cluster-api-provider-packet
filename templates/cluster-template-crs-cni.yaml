@@ -189,6 +189,7 @@ kind: PacketCluster
 metadata:
   name: ${CLUSTER_NAME}
 spec:
+  eipmanagement: ${EIP_MANAGEMENT:=CPEM}
   facility: ${FACILITY}
   projectID: ${PROJECT_ID}
 ---

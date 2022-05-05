@@ -32,6 +32,10 @@ type PacketClusterSpec struct {
 	// ControlPlaneEndpoint represents the endpoint used to communicate with the control plane.
 	// +optional
 	ControlPlaneEndpoint clusterv1.APIEndpoint `json:"controlPlaneEndpoint"`
+
+	// EIPManagement represents whether this cluster uses CPEM or kube-vip to
+	// manage its vip for the api server IP
+	EipManagement string `json:"eipmanagement"`
 }
 
 // PacketClusterStatus defines the observed state of PacketCluster
