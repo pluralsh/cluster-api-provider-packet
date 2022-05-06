@@ -61,10 +61,6 @@ spec:
                 - host
                 - port
                 type: object
-              eipmanagement:
-                description: EIPManagement represents whether this cluster uses CPEM
-                  or kube-vip to manage its vip for the api server IP
-                type: string
               facility:
                 description: Facility represents the Packet facility for this cluster
                 type: string
@@ -72,9 +68,13 @@ spec:
                 description: ProjectID represents the Packet Project where this cluster
                   will be placed into
                 type: string
+              vipManager:
+                description: VIPManager represents whether this cluster uses CPEM
+                  or kube-vip to manage its vip for the api server IP
+                type: string
             required:
-            - eipmanagement
             - projectID
+            - vipManager
             type: object
           status:
             description: PacketClusterStatus defines the observed state of PacketCluster
@@ -132,10 +132,6 @@ spec:
                 - host
                 - port
                 type: object
-              eipmanagement:
-                description: EIPManagement represents whether this cluster uses CPEM
-                  or kube-vip to manage its vip for the api server IP
-                type: string
               facility:
                 description: Facility represents the Packet facility for this cluster
                 type: string
@@ -143,9 +139,13 @@ spec:
                 description: ProjectID represents the Packet Project where this cluster
                   will be placed into
                 type: string
+              vipManager:
+                description: VIPManager represents whether this cluster uses CPEM
+                  or kube-vip to manage its vip for the api server IP
+                type: string
             required:
-            - eipmanagement
             - projectID
+            - vipManager
             type: object
           status:
             description: PacketClusterStatus defines the observed state of PacketCluster

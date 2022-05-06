@@ -241,7 +241,7 @@ func autoConvert_v1alpha3_PacketClusterSpec_To_v1beta1_PacketClusterSpec(in *Pac
 	if err := apiv1alpha3.Convert_v1alpha3_APIEndpoint_To_v1beta1_APIEndpoint(&in.ControlPlaneEndpoint, &out.ControlPlaneEndpoint, s); err != nil {
 		return err
 	}
-	out.EipManagement = in.EipManagement
+	out.VIPManager = in.VIPManager
 	return nil
 }
 
@@ -256,7 +256,7 @@ func autoConvert_v1beta1_PacketClusterSpec_To_v1alpha3_PacketClusterSpec(in *v1b
 	if err := apiv1alpha3.Convert_v1beta1_APIEndpoint_To_v1alpha3_APIEndpoint(&in.ControlPlaneEndpoint, &out.ControlPlaneEndpoint, s); err != nil {
 		return err
 	}
-	out.EipManagement = in.EipManagement
+	out.VIPManager = in.VIPManager
 	return nil
 }
 
