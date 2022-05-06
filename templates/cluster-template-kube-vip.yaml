@@ -160,7 +160,6 @@ spec:
       --interface "lo" \
       --vip "{{ .controlPlaneEndpoint }}" \
       --controlplane \
-      --services \
       --bgp \
       --peerAS $(cat /run/metadata.json | jq -r '.bgp_neighbors[0].peer_as') \
       --peerAddress $(cat /run/metadata.json | jq -r '.bgp_neighbors[0].peer_ips[0]') \
@@ -180,9 +179,9 @@ kind: PacketCluster
 metadata:
   name: ${CLUSTER_NAME}
 spec:
-  eipmanagement: ${EIP_MANAGEMENT:=KUBE_VIP}
   facility: ${FACILITY}
   projectID: ${PROJECT_ID}
+  vipManager: KUBE_VIP
 ---
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
 kind: PacketMachineTemplate
