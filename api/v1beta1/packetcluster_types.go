@@ -26,6 +26,9 @@ const (
 	NetworkInfrastructureReadyCondition clusterv1.ConditionType = "NetworkInfrastructureReady"
 )
 
+// VIPManagerType describes if the VIP will be managed by CPEM or kube-vip
+type VIPManagerType string
+
 // PacketClusterSpec defines the desired state of PacketCluster
 type PacketClusterSpec struct {
 	// ProjectID represents the Packet Project where this cluster will be placed into
@@ -40,7 +43,9 @@ type PacketClusterSpec struct {
 
 	// VIPManager represents whether this cluster uses CPEM or kube-vip to
 	// manage its vip for the api server IP
-	VIPManager string `json:"vipManager"`
+	// +kubebuilder:validation:Enum=CPEM;KUBE_VIP
+	// +kubebuilder:default:=CPEM
+	VIPManager VIPManagerType `json:"vipManager"`
 }
 
 // PacketClusterStatus defines the observed state of PacketCluster
